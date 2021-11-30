@@ -1,4 +1,4 @@
-package corrales_joe_juegojava;
+package uimenu;
 
 import java.util.Scanner;
 

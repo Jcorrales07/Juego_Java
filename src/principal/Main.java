@@ -1,4 +1,6 @@
-package corrales_joe_juegojava;
+package principal;
+
+import static uimenu.Menu.menuInicio;
 
 /**
  *
@@ -6,6 +8,6 @@ package corrales_joe_juegojava;
  */
 public class Main {
     public static void main(String[] args) {
-        Menu.menuInicio();
+        menuInicio();
     }
 }
