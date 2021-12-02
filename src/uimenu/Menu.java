@@ -1,16 +1,19 @@
 package uimenu;
 
 import java.util.Scanner;
+import principal.GhostGame;
 
 /**
  * @author Lenovo
  */
 public class Menu {
-    static Scanner input = new Scanner(System.in);
+    Scanner input = new Scanner(System.in);
+    GhostGame funcion = new GhostGame();
 
-    static byte opcion;
+    boolean acceso;
+    byte opcion;
     // Funcion que muestra el MENU DE INICIO
-    public static void menuInicio() {
+    public void menuInicio() {
         System.out.println("\n\t     [== BIENVENIDO A GHOSTGAME ==]");
         
         do {
@@ -38,6 +41,7 @@ public class Menu {
                     si algo esta mal entonces se le manda al menu principal
                     pero vamo a hacer que pregunte denuevo por que somos asi de pros*/
 //                    System.out.println("Ha creado su cuenta correctamente!");
+                    funcion.createPlayer();
                     menuPrincipal();
                     break;
                 case 0:
@@ -51,7 +55,7 @@ public class Menu {
     }
     
     // Funcion que muestra el MENU PRINCIPAL
-    public static void menuPrincipal() {
+    public void menuPrincipal() {
         System.out.println("\n\t\t»» HA INICIADO SESION! ««");
         do {
             System.out.print("\n\t[=== MENU PRINCIPAL ===]"

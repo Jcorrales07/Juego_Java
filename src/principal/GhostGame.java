@@ -1,18 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package principal;
 
-/**
- *
- * @author Lenovo
- */
+import java.util.Scanner;
+
 public class GhostGame {
+    Scanner input = new Scanner(System.in);
+    private Player usuarios[];
+
+    // Funcion verificar si el usuario existe
+    public String buscarUsuario(String username) {
+        for(Player jugador: usuarios) {
+            if (jugador.getUsername().equalsIgnoreCase(username)) {
+                System.out.println("Ese usuario ya esta utilizado!");
+            }
+        }
+        return "Usuario disponible!";
+    }
     
-    public static void main(String[] args) {
-            Player mi = new Player("Jcorrales", "123456789");
-            mi.mostrarDatos();
+    // Crear un nuevo jugador
+    public Player createPlayer() {
+        System.out.println("╠╩═╩╬══════════════╬╩═╩╣");
+        System.out.println("╠╬══╣REGISTRAR USUARIO╠══╬╣");
+        System.out.println("╠╦═╦╬══════════════╬╦═╦╣");
+        
+        System.out.print("Ingrese su usuario: ");
+        String username = input.next();
+        buscarUsuario(username);
+        System.out.print("Ingrese su contraseña: ");
+        String password = input.next();
+        
+        for(int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] == null) {
+                usuarios[i] = new Player(username, password); 
+            }
+        }
+        
+        // return temporal
+        return null;
     }
 }

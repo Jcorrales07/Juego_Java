@@ -5,8 +5,6 @@ package principal;
  * @author Lenovo
  */
 public class Player {
-
-    
    private String username;
    private String password;
    private double score;
@@ -46,11 +44,12 @@ public class Player {
     
     // Otras Funciones
     public void mostrarDatos() {
-        System.out.println("╠╩═╩╬══════════════╬╩═╩╣");
+        System.out.println("╠╩═╩╬═════════════════════════╬╩═╩╣");
         System.out.println("╠═◘═╬╣ DATOS DEL JUGADOR ╠╬═◘═╣");
-        System.out.println("╠╦═╦╬══════════════╬╦═╦╣\n");
+        System.out.println("╠╦═╦╬═════════════════════════╬╦═╦╣\n");
         System.out.println("Usuario: "+ username
-            + "\nPuntaje: "+ score);
+                        +"\nContraseña: "+ password
+                                +"\nPuntaje: "+ score);
         
     }
 }
