@@ -9,8 +9,9 @@ import principal.GhostGame;
 public class Menu {
     Scanner input = new Scanner(System.in);
     GhostGame funcion = new GhostGame();
-
-    boolean acceso;
+    
+    String username;
+    String password;
     byte opcion;
     // Funcion que muestra el MENU DE INICIO
     public void menuInicio() {
@@ -41,7 +42,12 @@ public class Menu {
                     si algo esta mal entonces se le manda al menu principal
                     pero vamo a hacer que pregunte denuevo por que somos asi de pros*/
 //                    System.out.println("Ha creado su cuenta correctamente!");
-                    funcion.createPlayer();
+                    System.out.println("\n\t╠╬══╣REGISTRAR USUARIO╠══╬╣");
+                    System.out.print("Ingrese su usuario: ");
+                    username = input.next();
+                    System.out.print("Ingrese su contraseña: ");
+                    password = input.next();
+                    funcion.createPlayer(username, password);
                     menuPrincipal();
                     break;
                 case 0:

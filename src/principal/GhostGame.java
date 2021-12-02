@@ -7,34 +7,28 @@ public class GhostGame {
     private Player usuarios[];
 
     // Funcion verificar si el usuario existe
-    public String buscarUsuario(String username) {
+    public Player buscarUsuario(String username) {
         for(Player jugador: usuarios) {
-            if (jugador.getUsername().equalsIgnoreCase(username)) {
+            if (jugador != null && jugador.getUsername().equals(username)) {
                 System.out.println("Ese usuario ya esta utilizado!");
+                return jugador;
             }
         }
-        return "Usuario disponible!";
+        return null;
     }
     
     // Crear un nuevo jugador
-    public Player createPlayer() {
-        System.out.println("╠╩═╩╬══════════════╬╩═╩╣");
-        System.out.println("╠╬══╣REGISTRAR USUARIO╠══╬╣");
-        System.out.println("╠╦═╦╬══════════════╬╦═╦╣");
-        
-        System.out.print("Ingrese su usuario: ");
-        String username = input.next();
-        buscarUsuario(username);
-        System.out.print("Ingrese su contraseña: ");
-        String password = input.next();
-        
-        for(int i = 0; i < usuarios.length; i++) {
-            if (usuarios[i] == null) {
-                usuarios[i] = new Player(username, password); 
-            }
+    public boolean createPlayer(String username, String password) {
+        if(buscarUsuario(username).equals(null)) {
+           for(int i = 0; i < usuarios.length; i++) {
+                if (usuarios[i] == null) {
+                    usuarios[i] = new Player(username, password); 
+                    System.out.println("Usuario correctamente creado!");
+                    return true;
+                }
+            } 
         }
-        
-        // return temporal
-        return null;
+        System.out.println("Ese usuario ya existe!");
+        return false;
     }
 }
