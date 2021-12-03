@@ -31,10 +31,13 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     System.out.println("\n\t╠╬══╣INICIAR SESIÓN╠══╬╣");
+                    
                     System.out.print("\n╠╬══╣Ingrese su usuario\n: ");
                     username = input.next();
+                    
                     System.out.print("╠╬══╣Ingrese su contraseña\n: ");
                     password = input.next();
+                    // Si se encuentra el usuario se da acceso
                     if (funcion.iniciarSesion(username, password)) {
                         menuPrincipal();
                     }
@@ -48,7 +51,6 @@ public class Menu {
                     
                     System.out.print("╠╬══╣Ingrese su contraseña\n: ");
                     password = input.next();
-                    
                     // Si el usuario es unico (hecho correctamente)... se da acceso
                     if (funcion.crearUsuario(username, password))
                         menuPrincipal();
@@ -86,6 +88,28 @@ public class Menu {
                     break;
                 case 2:
                     //CONFIGURACION
+                    System.out.print("\n\t╠╬══╣CONFIGURACIONES╠══╬╣"
+                            + "\n 1) Dificultad"
+                            + "\n 2) Cambiar contraseña"
+                            + "\n 3) Eliminar mi cuenta"
+                            + "\n 0) Regresar al Menu Principal"
+                            + "\nOPCION #");
+                    opcion = input.nextByte();
+                    
+                    switch (opcion) {
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 0:
+                            break;
+                            
+                        default:
+                            System.out.println("\nINGRESE UNA OPCION VALIDA!");
+                    }
+                    
                     break;
                 case 3:
                     //REPORTES

@@ -6,7 +6,7 @@ public class GhostGame {
     Scanner input = new Scanner(System.in);
     private Player[] usuarios = new Player[100];
     
-    // Funciones booleanas para acceso de menu
+    // Funciones booleanas para ACCESO de menu
     public boolean noMenu() {
         return false;
     }
@@ -15,7 +15,7 @@ public class GhostGame {
         return true;
     }
     
-    // Funcion verificar si el usuario existe
+    // Funcion VERIFICAR/BUSCAR si el usuario existe
     public Player buscarUsuario(String username) {
         for(Player jugador: usuarios) {
             if (jugador != null && jugador.getUsername().equals(username)) {
@@ -26,6 +26,7 @@ public class GhostGame {
         return null;
     }
     
+    // Funcion para INICIAR SESION
     public boolean iniciarSesion(String user, String pass) {
         Player vUser = buscarUsuario(user);
         if (vUser.getUsername().equalsIgnoreCase(user)) {
@@ -38,7 +39,7 @@ public class GhostGame {
         return noMenu();
     }
     
-    // Crear un nuevo jugador
+    // Funcion para CREAR un nuevo jugador
     public boolean crearUsuario(String username, String password) {
 //        System.out.println(buscarUsuario(username));
         if(buscarUsuario(username) == null) {
@@ -52,6 +53,4 @@ public class GhostGame {
         }
         return false;
     }
-    
-//    public boolean
 }
