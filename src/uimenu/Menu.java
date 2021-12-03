@@ -7,18 +7,21 @@ import principal.GhostGame;
  * @author Lenovo
  */
 public class Menu {
+    //Instancias de objetos
     Scanner input = new Scanner(System.in);
     GhostGame funcion = new GhostGame();
     
+    //Variables
+    byte opcion;
     String username;
     String password;
-    byte opcion;
+    
     // Funcion que muestra el MENU DE INICIO
     public void menuInicio() {
-        System.out.println("\n\t     [== BIENVENIDO A GHOSTGAME ==]");
+        System.out.println("\n\t     ╠╬══╣BIENVENIDO A GHOSTGAME╠══╬╣");
         
         do {
-            System.out.print("\n\t[=== MENU DE INICIO ===]"
+            System.out.print("\n\t╠╬══╣MENU DE INICIO╠══╬╣"
                 + "\n  1) Log in"
                 + "\n  2) Registrar Jugador"
                 + "\n  0) Salir"
@@ -27,33 +30,37 @@ public class Menu {
             
             switch (opcion) {
                 case 1:
-                    
-                    // funcion de login
-                    /* Hacer la verificacion del usuario, si existe le das acceso
-                    al menu principal*/
-//                    System.out.println("Ha iniciado sesion correctamente!");
-                    menuPrincipal();
-                    // si algo esta mal entonces se le manda al menu principal
-                    // pero vamo a hacer que pregunte denuevo por que somos asi de pros
-                    break;
-                case 2:
-                    /* Primero se tiene que registrar, si se hace bien entonces se
-                    le da el menu principal. NO se pueden REPETIR los users 
-                    si algo esta mal entonces se le manda al menu principal
-                    pero vamo a hacer que pregunte denuevo por que somos asi de pros*/
-//                    System.out.println("Ha creado su cuenta correctamente!");
-                    System.out.println("\n\t╠╬══╣REGISTRAR USUARIO╠══╬╣");
-                    System.out.print("Ingrese su usuario: ");
+                    System.out.println("\n\t╠╬══╣INICIAR SESIÓN╠══╬╣");
+                    System.out.print("\n╠╬══╣Ingrese su usuario\n: ");
                     username = input.next();
-                    System.out.print("Ingrese su contraseña: ");
+                    System.out.print("╠╬══╣Ingrese su contraseña\n: ");
                     password = input.next();
-                    funcion.createPlayer(username, password);
-                    menuPrincipal();
+                    if (funcion.iniciarSesion(username, password)) {
+                        menuPrincipal();
+                    }
                     break;
+                    
+                case 2:
+                    System.out.println("\n\t╠╬══╣REGISTRAR USUARIO╠══╬╣");
+                    
+                    System.out.print("\n╠╬══╣Ingrese su usuario\n: ");
+                    username = input.next();
+                    
+                    System.out.print("╠╬══╣Ingrese su contraseña\n: ");
+                    password = input.next();
+                    
+                    // Si el usuario es unico (hecho correctamente)... se da acceso
+                    if (funcion.crearUsuario(username, password))
+                        menuPrincipal();
+                    // de otro modo le da un mensaje
+                    else System.out.println("\nUsuario no disponible!");
+                    break;
+                    
                 case 0:
                     System.out.println("\nGracias por jugar!!"
                             + "\nHA TERMINADO EL PROGRAMA...");
                     break;
+                    
                 default:
                     System.out.println("\nINGRESE UNA OPCION VALIDA!");
             } 
@@ -64,7 +71,7 @@ public class Menu {
     public void menuPrincipal() {
         System.out.println("\n\t\t»» HA INICIADO SESION! ««");
         do {
-            System.out.print("\n\t[=== MENU PRINCIPAL ===]"
+            System.out.print("\n\t╠╬══╣MENU PRINCIPAL╠══╬╣"
                 + "\n  1) Jugar Ghosts"
                 + "\n  2) Configuracion"
                 + "\n  3) Reportes"
