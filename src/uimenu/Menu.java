@@ -2,6 +2,7 @@ package uimenu;
 
 import java.util.Scanner;
 import principal.GhostGame;
+import principal.Player;
 
 /**
  * @author Lenovo
@@ -15,6 +16,8 @@ public class Menu {
     byte opcion;
     String username;
     String password;
+    boolean repetir = true;
+
     
     // Funcion que muestra el MENU DE INICIO
     public void menuInicio() {
@@ -83,39 +86,83 @@ public class Menu {
                 opcion = input.nextByte(); 
         
             switch (opcion) {
-                case 1:
-                    //JUGAR GHOSTS
+                case 1://JUGAR GHOSTS
                     break;
-                case 2:
-                    //CONFIGURACION
-                    System.out.print("\n\t╠╬══╣CONFIGURACIONES╠══╬╣"
-                            + "\n 1) Dificultad"
-                            + "\n 2) Cambiar contraseña"
-                            + "\n 3) Eliminar mi cuenta"
-                            + "\n 0) Regresar al Menu Principal"
+                case 2://CONFIGURACION
+                    do {
+                       System.out.print("\n\t╠╬══╣CONFIGURACIONES╠══╬╣"
+                                + "\n 1) Dificultad"
+                                + "\n 2) Modo de Juego"
+                                + "\n 3) Regresar al Menu Principal"
+                                + "\nOPCION #");
+                        opcion = input.nextByte();
+
+                        switch (opcion) {
+                            case 1://DIFICULTAD
+                                break;
+                            case 2:// MODO DE JUEGO                                
+                                break;
+                            case 3:
+                                repetir = false;
+                                break;
+                            default:
+                                System.out.println("\nOPCION INVALIDA!");
+                        } 
+                    } while (repetir);
+                    break;
+                case 3://REPORTES
+                    do {
+                        System.out.print("\n\t╠╬══╣REPORTES╠══╬╣"
+                            + "\n\t1) Descripcion de mis ultimos 10 juegos"
+                            + "\n\t2) Ranking de Jugadores"
+                            + "\n\t3) Regresar al Menu Principal"
                             + "\nOPCION #");
-                    opcion = input.nextByte();
+                        opcion = input.nextByte();
                     
-                    switch (opcion) {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 0:
-                            break;
-                            
-                        default:
-                            System.out.println("\nINGRESE UNA OPCION VALIDA!");
-                    }
-                    
+                        switch (opcion) {
+                            case 1://ULTIMOS JUEGOS
+                                break;
+                            case 2://RANKING
+                                break;
+                            case 3:
+                                repetir = false;
+                                break;
+                            default:
+                                System.out.println("\nOPCION INVALIDA!");
+                        }
+                    } while (repetir);
                     break;
-                case 3:
-                    //REPORTES
-                    break;
-                case 4:
-                    //MI PERFIL
+                case 4://MI PERFIL
+//                    jugador = new Player(username, password);
+                    do {
+                       System.out.print("\n\t╠╬══╣MI PERFIL╠══╬╣"
+                                + "\n 1) Ver mis Datos"
+                                + "\n 2) Cambiar Contraseña"
+                                + "\n 3) Eliminar mi cuenta"
+                                + "\n 4) Regresar al Menu Principal"
+                                + "\nOPCION #");
+                        opcion = input.nextByte();
+
+                        switch (opcion) {
+                            case 1://VER DATOS
+//                                mostrarDatos();
+                                break;
+                                
+                            case 2://CAMBIAR CONTRASEÑA
+                                System.out.print("Introduzca su nueva contraseña\n:");
+                                password = input.next();
+//                                setPassword(password);
+                                System.out.println("Cambio de contraseña correctamente");
+                                break;
+                                
+                            case 4:
+                                repetir = false;
+                                break;
+
+                            default:
+                                System.out.println("\nOPCION INVALIDA!");
+                        } 
+                    } while (repetir);
                     break;
                 case 0:
                     System.out.println("\n\t\t»» HA CERRADO SESION! ««");
@@ -125,6 +172,5 @@ public class Menu {
                     System.out.println("\nINGRESE UNA OPCION VALIDA!");       
             }
         } while (opcion != 0);
-        
     }
 }

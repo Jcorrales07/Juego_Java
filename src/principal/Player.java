@@ -5,18 +5,18 @@ package principal;
  * @author Lenovo
  */
 public class Player {
-   private String username;
-   private String password;
-   private double score;
+    private String username;
+    private String password;
+    private double score;
    
-   Player(String username, String password) {
-       this.username = username;
-       this.password = password;
-       score = 0;
-   }
+    public Player(String username, String password) {
+        this.username = username;
+        this.password = password;
+        score = 0;
+    }
    
-   // SET y GET de username
-   public String getUsername() {
+    // SET y GET de username
+    public String getUsername() {
         return username;
     }
 
@@ -44,12 +44,11 @@ public class Player {
     
     // Otras Funciones
     public void mostrarDatos() {
-        System.out.println("╠╩═╩╬═════════════════════════╬╩═╩╣");
-        System.out.println("╠═◘═╬╣ DATOS DEL JUGADOR ╠╬═◘═╣");
-        System.out.println("╠╦═╦╬═════════════════════════╬╦═╦╣\n");
+        System.out.println("\n╠╩═╩╬═══════════════════════╬╩═╩╣");
+        System.out.println("╠═◘═╬╣DATOS DEL JUGADOR╠╬═◘═╣");
+        System.out.println("╠╦═╦╬═══════════════════════╬╦═╦╣\n");
         System.out.println("Usuario: "+ username
                         +"\nContraseña: "+ password
-                                +"\nPuntaje: "+ score);
-        
+                        +"\nPuntaje: "+ score); 
     }
 }
