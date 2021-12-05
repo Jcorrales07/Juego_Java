@@ -2,7 +2,6 @@ package uimenu;
 
 import java.util.Scanner;
 import principal.GhostGame;
-import principal.Player;
 
 /**
  * @author Lenovo
@@ -10,7 +9,7 @@ import principal.Player;
 public class Menu {
     //Instancias de objetos
     Scanner input = new Scanner(System.in);
-    GhostGame funcion = new GhostGame();
+    GhostGame func = new GhostGame();
     
     //Variables
     byte opcion;
@@ -37,11 +36,8 @@ public class Menu {
                     
                     System.out.print("\n╠╬══╣Ingrese su usuario\n: ");
                     username = input.next();
-                    
-                    System.out.print("╠╬══╣Ingrese su contraseña\n: ");
-                    password = input.next();
                     // Si se encuentra el usuario se da acceso
-                    if (funcion.iniciarSesion(username, password)) {
+                    if (func.iniciarSesion(username)) {
                         menuPrincipal();
                     }
                     break;
@@ -52,13 +48,10 @@ public class Menu {
                     System.out.print("\n╠╬══╣Ingrese su usuario\n: ");
                     username = input.next();
                     
-                    System.out.print("╠╬══╣Ingrese su contraseña\n: ");
-                    password = input.next();
                     // Si el usuario es unico (hecho correctamente)... se da acceso
-                    if (funcion.crearUsuario(username, password))
+                    if (func.crearUsuario(username))
                         menuPrincipal();
-                    // de otro modo le da un mensaje
-                    else System.out.println("\nUsuario no disponible!");
+                    // de otro modo le da un mensaje de error en la funcion crearUsuario
                     break;
                     
                 case 0:
@@ -67,14 +60,14 @@ public class Menu {
                     break;
                     
                 default:
-                    System.out.println("\nINGRESE UNA OPCION VALIDA!");
+                    System.out.println("\nOPCION INVALIDA!");
             } 
         } while (opcion != 0);
     }
     
     // Funcion que muestra el MENU PRINCIPAL
     public void menuPrincipal() {
-        System.out.println("\n\t\t»» HA INICIADO SESION! ««");
+        System.out.println("\n\t\t»» HA INICIADO SESION ««");
         do {
             System.out.print("\n\t╠╬══╣MENU PRINCIPAL╠══╬╣"
                 + "\n  1) Jugar Ghosts"
@@ -133,7 +126,6 @@ public class Menu {
                     } while (repetir);
                     break;
                 case 4://MI PERFIL
-//                    jugador = new Player(username, password);
                     do {
                        System.out.print("\n\t╠╬══╣MI PERFIL╠══╬╣"
                                 + "\n 1) Ver mis Datos"
@@ -145,14 +137,13 @@ public class Menu {
 
                         switch (opcion) {
                             case 1://VER DATOS
-//                                mostrarDatos();
+                                func.buscarUsuario(username).mostrarDatos();
                                 break;
                                 
                             case 2://CAMBIAR CONTRASEÑA
-                                System.out.print("Introduzca su nueva contraseña\n:");
+                                System.out.print("Introduzca su contraseña actual\n: ");
                                 password = input.next();
-//                                setPassword(password);
-                                System.out.println("Cambio de contraseña correctamente");
+                                func.cambiarContra(password);                             
                                 break;
                                 
                             case 4:
@@ -165,11 +156,11 @@ public class Menu {
                     } while (repetir);
                     break;
                 case 0:
-                    System.out.println("\n\t\t»» HA CERRADO SESION! ««");
+                    System.out.println("\n\t\t»» HA CERRADO SESION ««");
                     menuInicio();
                     break;
                 default:
-                    System.out.println("\nINGRESE UNA OPCION VALIDA!");       
+                    System.out.println("\nOPCION INVALIDA!");       
             }
         } while (opcion != 0);
     }
