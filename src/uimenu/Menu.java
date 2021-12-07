@@ -4,13 +4,13 @@ import java.util.Scanner;
 import principal.GhostGame;
 
 /**
- * @author Lenovo
+ * @author Joe Corrales
  */
 public class Menu {
     //Instancias de objetos
     Scanner input = new Scanner(System.in);
     GhostGame func = new GhostGame();
-    
+
     //Variables
     byte opcion;
     String username;
@@ -34,8 +34,7 @@ public class Menu {
                 case 1:
                     System.out.println("\n\t╠╬══╣INICIAR SESIÓN╠══╬╣");
                     
-                    System.out.print("\n╠╬══╣Ingrese su usuario\n: ");
-                    username = input.next();
+                    username = func.nextStringString("\n╠╬══╣Ingrese su usuario\n: ");
                     // Si se encuentra el usuario se da acceso
                     if (func.iniciarSesion(username)) {
                         menuPrincipal();
@@ -45,8 +44,7 @@ public class Menu {
                 case 2:
                     System.out.println("\n\t╠╬══╣REGISTRAR USUARIO╠══╬╣");
                     
-                    System.out.print("\n╠╬══╣Ingrese su usuario\n: ");
-                    username = input.next();
+                    username = func.nextStringString("\n╠╬══╣Ingrese su usuario\n: ");
                     
                     // Si el usuario es unico (hecho correctamente)... se da acceso
                     if (func.crearUsuario(username))
@@ -67,7 +65,7 @@ public class Menu {
     
     // Funcion que muestra el MENU PRINCIPAL
     public void menuPrincipal() {
-        System.out.println("\n\t\t»» HA INICIADO SESION ««");
+        System.out.println("\n\t»» HA INICIADO SESION ««");
         do {
             System.out.print("\n\t╠╬══╣MENU PRINCIPAL╠══╬╣"
                 + "\n  1) Jugar Ghosts"
@@ -80,6 +78,11 @@ public class Menu {
         
             switch (opcion) {
                 case 1://JUGAR GHOSTS
+                    username = func.nextStringString("\n╠╬══╣Ingrese el usuario del Judagor 2\n: ");
+                    if (func.verificarUsuario(username)) {
+                        System.out.println();
+                        func.jugarGhost();
+                    }
                     break;
                 case 2://CONFIGURACION
                     do {
@@ -141,8 +144,7 @@ public class Menu {
                                 break;
                                 
                             case 2://CAMBIAR CONTRASEÑA
-                                System.out.print("Introduzca su contraseña actual\n: ");
-                                password = input.next();
+                                password = func.nextStringString("\nIntroduzca su contraseña actual\n: ");
                                 func.cambiarContra(password);                             
                                 break;
                                 
@@ -156,7 +158,7 @@ public class Menu {
                     } while (repetir);
                     break;
                 case 0:
-                    System.out.println("\n\t\t»» HA CERRADO SESION ««");
+                    System.out.println("\n\t»» HA CERRADO SESION ««");
                     menuInicio();
                     break;
                 default:
