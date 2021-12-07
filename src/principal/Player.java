@@ -1,13 +1,16 @@
 package principal;
 
+import java.util.ArrayList;
 /**
  *
- * @author Lenovo
+ * @author Joe Corrales
  */
 public class Player {
     private String username;
     private String password;
     private double score;
+    //Array dinamico para almacenar los resultados de los juegos
+    ArrayList<String> logrosFinales = new ArrayList<>();
    
     public Player(String username, String password) {
         this.username = username;
