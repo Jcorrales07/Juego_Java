@@ -12,7 +12,7 @@ public class Menu {
     GhostGame func = new GhostGame();
 
     //Variables
-    byte opcion;
+    int opcion;
     String username;
     String password;
     boolean repetir = true;
@@ -21,30 +21,25 @@ public class Menu {
     // Funcion que muestra el MENU DE INICIO
     public void menuInicio() {
         System.out.println("\n\t     ╠╬══╣BIENVENIDO A GHOSTGAME╠══╬╣");
-        
         do {
-            System.out.print("\n\t╠╬══╣MENU DE INICIO╠══╬╣"
+            opcion = func.myNextInt("\n\t╠╬══╣MENU DE INICIO╠══╬╣"
                 + "\n  1) Log in"
                 + "\n  2) Registrar Jugador"
                 + "\n  0) Salir"
-                + "\nOPCION #");
-            opcion = input.nextByte(); 
+                + "\nOPCION #"); 
             
             switch (opcion) {
                 case 1:
                     System.out.println("\n\t╠╬══╣INICIAR SESIÓN╠══╬╣");
-                    
-                    username = func.nextStringString("\n╠╬══╣Ingrese su usuario\n: ");
+                    username = func.myNextString("\n╠╬══╣Ingrese su usuario\n: ");
                     // Si se encuentra el usuario se da acceso
-                    if (func.iniciarSesion(username)) {
+                    if (func.iniciarSesion(username)) 
                         menuPrincipal();
-                    }
                     break;
                     
                 case 2:
                     System.out.println("\n\t╠╬══╣REGISTRAR USUARIO╠══╬╣");
-                    
-                    username = func.nextStringString("\n╠╬══╣Ingrese su usuario\n: ");
+                    username = func.myNextString("\n╠╬══╣Ingrese su usuario\n: ");
                     
                     // Si el usuario es unico (hecho correctamente)... se da acceso
                     if (func.crearUsuario(username))
@@ -67,18 +62,17 @@ public class Menu {
     public void menuPrincipal() {
         System.out.println("\n\t»» HA INICIADO SESION ««");
         do {
-            System.out.print("\n\t╠╬══╣MENU PRINCIPAL╠══╬╣"
+            opcion = func.myNextInt("\n\t╠╬══╣MENU PRINCIPAL╠══╬╣"
                 + "\n  1) Jugar Ghosts"
                 + "\n  2) Configuracion"
                 + "\n  3) Reportes"
                 + "\n  4) Mi Perfil"                    
                 + "\n  0) Cerrar Sesion"
-                + "\nOPCION #");
-                opcion = input.nextByte(); 
+                + "\nOPCION #"); 
         
             switch (opcion) {
                 case 1://JUGAR GHOSTS
-                    username = func.nextStringString("\n╠╬══╣Ingrese el usuario del Judagor 2\n: ");
+                    username = func.myNextString("\n╠╬══╣Ingrese el usuario del Judagor 2\n: ");
                     if (func.verificarUsuario(username)) {
                         System.out.println();
                         func.jugarGhost();
@@ -86,17 +80,39 @@ public class Menu {
                     break;
                 case 2://CONFIGURACION
                     do {
-                       System.out.print("\n\t╠╬══╣CONFIGURACIONES╠══╬╣"
-                                + "\n 1) Dificultad"
-                                + "\n 2) Modo de Juego"
-                                + "\n 3) Regresar al Menu Principal"
-                                + "\nOPCION #");
-                        opcion = input.nextByte();
+                        opcion = func.myNextInt("\n\t╠╬══╣CONFIGURACIONES╠══╬╣"
+                            + "\n 1) Dificultad"
+                            + "\n 2) Modo de Juego"
+                            + "\n 3) Regresar al Menu Principal"
+                            + "\nOPCION #");
 
                         switch (opcion) {
                             case 1://DIFICULTAD
+                                opcion = func.myNextInt("\n\t╠╬══╣DIFICULTAD╠══╬╣"
+                                    + "\n 1) Normal"
+                                    + "\n 2) Expert"
+                                    + "\n 3) Genius"
+                                    + "OPCION #");
+//                                func.configuracion(opcion);
+                                
                                 break;
-                            case 2:// MODO DE JUEGO                                
+                            case 2:// MODO DE JUEGO 
+                                opcion = func.myNextInt("\n\t╠╬══╣MODO DE JUEGO╠══╬╣"
+                                    + "\n 1) Aleatorio"
+                                    + "\n 2) Manual"
+                                    + "OPCION #");
+                                
+                                switch(opcion) {
+                                    case 1:
+                                        break;
+                                        
+                                    case 2:
+                                        break;
+                                        
+                                    default:
+                                        System.out.println("» No existe «");
+                                }
+                                
                                 break;
                             case 3:
                                 repetir = false;
@@ -108,12 +124,11 @@ public class Menu {
                     break;
                 case 3://REPORTES
                     do {
-                        System.out.print("\n\t╠╬══╣REPORTES╠══╬╣"
+                        opcion = func.myNextInt("\n\t╠╬══╣REPORTES╠══╬╣"
                             + "\n\t1) Descripcion de mis ultimos 10 juegos"
                             + "\n\t2) Ranking de Jugadores"
                             + "\n\t3) Regresar al Menu Principal"
                             + "\nOPCION #");
-                        opcion = input.nextByte();
                     
                         switch (opcion) {
                             case 1://ULTIMOS JUEGOS
@@ -130,13 +145,12 @@ public class Menu {
                     break;
                 case 4://MI PERFIL
                     do {
-                       System.out.print("\n\t╠╬══╣MI PERFIL╠══╬╣"
+                        opcion = func.myNextInt("\n\t╠╬══╣MI PERFIL╠══╬╣"
                                 + "\n 1) Ver mis Datos"
                                 + "\n 2) Cambiar Contraseña"
                                 + "\n 3) Eliminar mi cuenta"
                                 + "\n 4) Regresar al Menu Principal"
                                 + "\nOPCION #");
-                        opcion = input.nextByte();
 
                         switch (opcion) {
                             case 1://VER DATOS
@@ -144,8 +158,14 @@ public class Menu {
                                 break;
                                 
                             case 2://CAMBIAR CONTRASEÑA
-                                password = func.nextStringString("\nIntroduzca su contraseña actual\n: ");
+                                password = func.myNextString("\nIntroduzca su contraseña actual\n: ");
                                 func.cambiarContra(password);                             
+                                break;
+                                
+                            case 3://ELIMINAR CUENTA
+                                func.eliminarCuenta();
+                                menuInicio();
+                                repetir = false;
                                 break;
                                 
                             case 4:

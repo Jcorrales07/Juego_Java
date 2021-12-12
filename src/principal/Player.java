@@ -9,6 +9,7 @@ public class Player {
     private String username;
     private String password;
     private double score;
+    private int dificultad;
     //Array dinamico para almacenar los resultados de los juegos
     ArrayList<String> logrosFinales = new ArrayList<>();
    
@@ -16,6 +17,7 @@ public class Player {
         this.username = username;
         this.password = password;
         score = 0;
+        dificultad = 8;
     }
    
     // SET y GET de username
@@ -43,6 +45,14 @@ public class Player {
 
     public void setScore(double score) {
         this.score = score;
+    }
+    
+    public void setDificultad(int dificultad) {
+        this.dificultad = dificultad;
+    }
+    
+    public int getDificultad() {
+        return dificultad;
     }
     
     // Otras Funciones
