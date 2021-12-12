@@ -15,12 +15,20 @@ public class GhostGame {
     String password;
     String posVacia = "▄";
     Player validUser; //Variable de uso temporal
+    boolean turno;
         
     //METODOS 
     
     // Funcion para ejecutar el juego
     public void jugarGhost() {
         matrizInicial(tablero, posVacia);
+        
+//        while()
+        
+        
+        // Va  a estar switcheando turno
+        turno = !turno;
+        
         mostrarMatriz(tablero); // este va a estar dentro de un while
     }
     
@@ -96,21 +104,12 @@ public class GhostGame {
     public void mostrarMatriz(String[][] matriz) {
         for (int fila = 0; fila < matriz.length; fila++) {
             for (int columna = 0; columna < matriz.length; columna++) {
-                numeros(matriz);
                 System.out.print("  "+ matriz[fila][columna] +"  ");
             }
             System.out.println();
             System.out.println();
         }
-    }
-    
-    public void numeros(String[][] matriz) {
-        for (int columna = 0; columna < matriz.length; columna++) {
-            for (int fila = 0; fila < matriz[0].length; fila++) {
-                matriz[0][columna] += (columna+1);
-            }
-        }
-    }
+    } 
     
     // Funcion para pedir una cadena con un mensaje especifico
     public String nextStringString(String mensaje) {
