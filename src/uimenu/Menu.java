@@ -72,11 +72,7 @@ public class Menu {
         
             switch (opcion) {
                 case 1://JUGAR GHOSTS
-                    username = func.myNextString("\n╠╬══╣Ingrese el usuario del Judagor 2\n: ");
-                    if (func.verificarUsuario(username)) {
-                        System.out.println();
-                        func.jugarGhost();
-                    }
+                    func.accesoAlJuego();
                     break;
                 case 2://CONFIGURACION
                     do {
@@ -89,30 +85,15 @@ public class Menu {
                         switch (opcion) {
                             case 1://DIFICULTAD
                                 opcion = func.myNextInt("\n\t╠╬══╣DIFICULTAD╠══╬╣"
-                                    + "\n 1) Normal"
-                                    + "\n 2) Expert"
-                                    + "\n 3) Genius"
-                                    + "OPCION #");
-//                                func.configuracion(opcion);
+                                    + "\n 1) Normal (8 fantasmas)"
+                                    + "\n 2) Expert (4 fantasmas)"
+                                    + "\n 3) Genius (2 fantasmas)"
+                                    + "\nOPCION #");
+                                func.configDificultad(opcion);
                                 
                                 break;
                             case 2:// MODO DE JUEGO 
-                                opcion = func.myNextInt("\n\t╠╬══╣MODO DE JUEGO╠══╬╣"
-                                    + "\n 1) Aleatorio"
-                                    + "\n 2) Manual"
-                                    + "OPCION #");
-                                
-                                switch(opcion) {
-                                    case 1:
-                                        break;
-                                        
-                                    case 2:
-                                        break;
-                                        
-                                    default:
-                                        System.out.println("» No existe «");
-                                }
-                                
+                                func.configModoDeJuego();
                                 break;
                             case 3:
                                 repetir = false;

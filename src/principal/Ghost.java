@@ -16,7 +16,6 @@ public class Ghost {
         this.imagen = imagen;
         this.estado = estado;
         this.jugador = jugador;
-        this.estado = estado;
     }
     
     public void setImagen(String imagen) {
