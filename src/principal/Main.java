@@ -1,11 +1,8 @@
 package principal;
 
+/** @author Joe Corrales */
 import uimenu.Menu;
 
-/**
- *
- * @author Lenovo
- */
 public class Main {
     public static void main(String[] args) {
         Menu entrar = new Menu();

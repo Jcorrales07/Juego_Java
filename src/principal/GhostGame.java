@@ -1,8 +1,6 @@
 package principal;
 
-/**
- * @author Joe Corrales
- */
+/** @author Joe Corrales */
 import java.util.Scanner;
 
 public class GhostGame {
@@ -18,10 +16,8 @@ public class GhostGame {
     String[] posJ2 = new String[8];
     
     //Variables/Atributos globales para ejecutar funciones
-    int codigo, cantidad;
-    int fila, columna;
-    String username, password;
-    String posVacia = "▄";
+    int codigo, cantidad, fila, columna, cantFantasmas;
+    String username, password, posVacia = "❖";
     Player Jugador1; //Variable de uso temporal para mantener al Usuario activo
     Player Jugador2; //Variable para conseguir el segundo Jugador
     boolean turno, modoJuego;
@@ -30,36 +26,13 @@ public class GhostGame {
     
     // Funcion para ejecutar el juego
     public void jugarGhost() {
-        rellenarPosiciones();
-        matrizInicial(tablero);
-        mostrarMatriz(tablero);  // este va a estar dentro de un while
+        inicioPartida();
+        crearTDFantasmas();
+        modoJuego();
+        pruebaSeleccion(tablero);
+        //Empieza el jugador 1
+        //Luego el jugador 2
         
-        int cantFantasmas = Jugador1.getDificultad();
-        crearFantasmas(cantFantasmas);
-        if (modoJuego) {
-            System.out.println("MODO DE JUEGO: MANUAL");
-            modoManual();
-        } else {
-            System.out.println("MODO DE JUEGO: ALEATORIO");
-            modoAleatorio();
-        }
-        
-//        boolean temp = false;
-//        while(!temp/*!finDelJuego(String[][] matriz, posVacia)*/) {
-//            
-//            int fila;
-//            int columna;
-//            
-//            fila = myNextInt("Seleccione la fila a moverse\n: ");
-//            columna = myNextInt("Seleccione la columna a moverse\n: ");
-//            System.out.println(verificarPosicion(fila, columna));
-//        }
-        
-        
-        // Va  a estar switcheando turno
-//        turno = !turno;
-        
-//        mostrarMatriz(tablero); // este va a estar dentro de un while
     }
     
     // Funcion VERIFICAR/BUSCAR si el usuario existe
@@ -81,6 +54,8 @@ public class GhostGame {
     
     // Funcion para INICIAR SESION
     public boolean iniciarSesion(String username) { // se ingresa el usuario
+        usuarios[0] = new Player("Joe", "123"); // TEMPORAL
+        usuarios[1] = new Player("Laura", "123");// TEMPORAL
         Jugador1 = buscarUsuario(username); // se almacena el OBJETO jugador temporalmente en esta variable
         if (verificarUsuario(username)) { // si el OBJETO jugador no esta vacio
             password = myNextString("╠╬══╣Ingrese su contraseña\n: "); // se le pide la contraseña
@@ -104,7 +79,7 @@ public class GhostGame {
                     usuarios[i] = new Player(username, password); //Registra el nuevo usuario
                     Jugador1 = buscarUsuario(username); 
                     codigo = i; // guarda la posicion en la coleccion... se usa para la funcion de borrar
-                    System.out.println("\tUsuario correctamente creado! ®");
+                    System.out.println("     Usuario correctamente creado! ®");
                     return true;
                 }
             } 
@@ -157,15 +132,10 @@ public class GhostGame {
     //Funcion para definir el modo de juego
     public void configModoDeJuego() {
         int opcion = myNextInt("\n\t╠╬══╣MODO DE JUEGO╠══╬╣"
-                                    + "\n 1) Aleatorio"
-                                    + "\n 2) Manual"
-                                    + "\nOPCION #");
-        if (opcion == 2) 
-            modoJuego = true; //Preguntar si cuando se pone el modo manual se puede empezar otra partida asi
-        else if (opcion == 1)
-            modoJuego = false;// o si siempre empezar en aleatorio
-        else
-            System.out.println("Modo de Juego no valido");
+                                + "\n 1) Aleatorio"
+                                + "\n 2) Manual"
+                                + "\nOPCION #");
+        modoJuego = (opcion == 2); //Operador ternario para selecionar el modo de juego
     }
     
     //Funcion para dar acceso al Juego
@@ -179,6 +149,56 @@ public class GhostGame {
         } else System.out.println("No puede jugar contra usted mismo.");
     }
     
+    //Funcion con varios procedimientos para iniciar una partida
+    public void inicioPartida() {
+        rellenarPosiciones(); //Rellena las posiciones de todos los jugadores
+        matrizInicial(tablero); //Rellena la matriz
+        mostrarMatriz(tablero); //Muestra la matriz 
+    }
+    
+    //Funcion para mandar a crear todos los fanasmas
+    public void crearTDFantasmas() {
+        cantFantasmas = Jugador1.getDificultad();
+        fabricaFantasmas(cantFantasmas);
+    }
+    
+    public void modoJuego() {
+        if (modoJuego) {
+            System.out.println("     MODO DE JUEGO: MANUAL");
+            modoManual();
+        } else {
+            System.out.println("     MODO DE JUEGO: ALEATORIO\n");
+            modoAleatorio();
+        }
+    }
+    
+    public void pruebaSeleccion(Ghost[][] matriz) {
+        System.out.println("╠╬══╣SELECCIONE UN FANTASMA╠══╬╣");
+        fila = myNextInt("Seleccione una fila: "); //
+        columna = myNextInt("Seleccione una columna: ");
+        if ((fila <= 6 && fila >= 1) && (columna <= 6 && columna >= 1)) { // si la coordena esta en el rango
+            pruebaMovimiento(matriz, fila, columna); // se le da acceso
+        } else System.out.println("Fuera del rango\nVuelva a seleccionar"); // si no da un mensaje
+    }
+    
+    public void pruebaMovimiento(Ghost[][] matriz, int fila, int columna) {
+        //si la coordenada seleccionada esta un fantasma del mismo jugador
+        if (matriz[(fila-1)][(columna-1)].getJugador().equals(Jugador1.getUsername())) {
+                int fila2 = myNextInt("Seleccione una fila: ");
+                int columna2 = myNextInt("Seleccione una columna: "); // se le pide la coordenada a moverse
+                if ((fila2 <= 6 && fila2 >= 1) && (columna2 <= 6 && columna2 >= 1)) { // valida el rango
+                    /*TENGO QUE HACER QUE LA COORDENADA DE ANTES SE LE SUME Y RESTE 1 A LAS COLUMNA Y SE LE RESTE (JUGADOR 1) 1 A LAS FILAS
+                    PARA EL JUGADOR 2 ES IGUAL EN LAS COLUMNAS PERO EN LA FILA SE LE SUMA 1. */
+                    
+                    if (matriz[(fila-1)][(columna-1)].getJugador().equals(Jugador1.getUsername())) {
+                        matriz[(fila2-1)][(columna2-1)] = matriz[(fila-1)][(columna-1)];
+                        matriz[(fila-1)][(columna-1)] = new Ghost(posVacia, "vacio", "ninguno");
+                        mostrarMatriz(matriz);
+                    } else System.out.println("No se puede mirrey");
+                } else System.out.println("Fuera del rango");
+            } 
+    }
+    
     //Funcion para rellenar las posiciones
     public void rellenarPosiciones() {
         posJ1[0] = "[5]{2}"; posJ1[1] = "[5]{3}"; posJ1[2] = "[5]{4}"; posJ1[3] = "[5]{5}";
@@ -190,25 +210,22 @@ public class GhostGame {
     // Funcion para rellenar la matriz con "▄"
     public void matrizInicial(Ghost[][] matriz) {
         for (int fila = 0; fila < matriz.length; fila++) {
-            for (int columna = 0; columna < matriz.length; columna++) {
-                matriz[fila][columna] = new Ghost("▄", "vacio", "ninguno"); //👻
-            }
+            for (int columna = 0; columna < matriz.length; columna++) 
+                matriz[fila][columna] = new Ghost(posVacia, "vacio", "ninguno"); //👻
         }
     }
     
     // Funcion para mostrar el tablero actualizado... cada ciclo itera y actualiza el tablero...
     public void mostrarMatriz(Ghost[][] matriz) {
         for (int fila = 0; fila < matriz.length; fila++) {
-            for (int columna = 0; columna < matriz.length; columna++) {
-                System.out.print("  "+ matriz[fila][columna].getImagen() +"  ");
-            }
-            System.out.println();
-            System.out.println();
+            for (int columna = 0; columna < matriz.length; columna++)
+                System.out.print("  "+ matriz[fila][columna].getImagen()+"  ");
+            System.out.println("\n");
         }
     }
     
     //Funcion para crear los fantasmas de cada Jugador
-    public void crearFantasmas(int cantFantasmas) {
+    public void fabricaFantasmas(int cantFantasmas) {
         //Se le asignan los espacios a los arreglos
         fantasmasJ1 = new Ghost[cantFantasmas];
         fantasmasJ2 = new Ghost[cantFantasmas];
@@ -247,13 +264,11 @@ public class GhostGame {
             fila = myNextInt("Seleccionar Fila: ");
             columna = myNextInt("Seleccionar Columna: ");
             System.out.println();
-            String Fila = String.valueOf(fila); // se parsean las filas y las columnas 
-            String Columna = String.valueOf(columna); // para verificar si la union de esos dos digitos
-            String union = "["+Fila+"]{"+Columna+"}"; // se encuentra si disponible
-            if (buscarPosicion(union, posicionesJdr) != -1) { // si esta la posicion disponible
+            union(fila, columna);
+            if (buscarPosicion(union(fila, columna), posicionesJdr) != -1) { // si esta la posicion disponible
                 if (matriz[(fila-1)][(columna-1)].getImagen().equals(posVacia)) { // verifica que este vacia la coordenada
                     matriz[(fila-1)][(columna-1)] = fantasmasJdr[i]; // pone el fantasma
-                    posicionesJdr[buscarPosicion(union, posicionesJdr)] = null; // borra la coordenada usada
+                    posicionesJdr[buscarPosicion(union(fila, columna), posicionesJdr)] = null; // borra la coordenada usada
                 } 
             } else {
                 i--;
@@ -267,6 +282,7 @@ public class GhostGame {
     //Funcion de el modo de juego ALEATORIO
     public void modoAleatorio() {
         ponerRandom(tablero);
+        mostrarMatriz(tablero);
     }
     
     public void ponerRandom(Ghost[][] matriz) {
@@ -286,40 +302,22 @@ public class GhostGame {
             while(!(columna != minCo && columna <= maxCo)) 
                 columna = (int) (Math.random() * (maxCo+1));
             
-            System.out.println();
-            
-            String Fila = String.valueOf(fila); // se parsean las filas y las columnas 
-            String Columna = String.valueOf(columna); // para verificar si la union de esos dos digitos
-            String union = "["+Fila+"]{"+Columna+"}"; // se encuentra dispoonible
-            if (buscarPosicion(union, posicionesJdr) != -1) {
+            union(fila, columna);
+            if (buscarPosicion(union(fila, columna), posicionesJdr) != -1) {
                 if (matriz[(fila-1)][(columna-1)].getImagen().equals(posVacia)) {
                     matriz[(fila-1)][(columna-1)] = fantasmasJdr[i];
-                    posicionesJdr[buscarPosicion(union, posicionesJdr)] = null;
+                    posicionesJdr[buscarPosicion(union(fila, columna), posicionesJdr)] = null;
                 } 
             } else i--;
-        }  
-        
-    }
-    
-    //Funcion para listar las posiciones disponibles de cada Jugador
-    public void listarPosiciones(String[] posicionesJdr) {
-        System.out.println("Posiciones disponibles: \nEjemplo para poner un fantasma: ");
-        System.out.println("'[Filas]: [5]{2} :{Columnas}'");
-        for(String pos: posicionesJdr) {
-            if (pos != null) {
-                System.out.println("\t» "+pos);
-            }
         }
     }
     
-    //Funcion temporal
-    public void listarFantasmas(Ghost[] fantasmasJdr) {
-        System.out.println("FANTASMAS");
-        for(Ghost ghost: fantasmasJdr) {
-            System.out.println(ghost.getEstado());
-            System.out.println(ghost.getImagen());
-            System.out.println(ghost.getJugador());
-        }
+    //Funcion para parsear numeros a cadenas, se usa para las posiciones disponibles
+    public String union(int fila, int columna) {
+        String Fila = String.valueOf(fila); // se parsean las filas y las columnas 
+        String Columna = String.valueOf(columna); // para verificar si la union de esos dos digitos
+        String union = "["+Fila+"]{"+Columna+"}"; // se encuentra dispoonible
+        return union;
     }
     
     //Funcion para buscar una posicion, que concuerde con la union de la seleccion del usuario
@@ -332,15 +330,15 @@ public class GhostGame {
         return -1;
     }
     
-    //Funcion temporal para verificar la posicion 
-    public boolean verificarPosicion(int fila, int columna) {
-        if ((fila >= 0 && fila <= 1) || (fila >= 4 && fila <= 5)) {
-            if (columna >= 1 && columna <= 4) {
-                System.out.println("Coordenada aceptada ["+fila+"]["+columna+"]");
-                return true;
+    //Funcion para listar las posiciones disponibles de cada Jugador
+    public void listarPosiciones(String[] posicionesJdr) {
+        System.out.println("Posiciones disponibles: \nEjemplo para poner un fantasma: ");
+        System.out.println("'[Filas]: [5]{2} :{Columnas}'");
+        for(String pos: posicionesJdr) {
+            if (pos != null) {
+                System.out.println("\t» "+pos);
             }
         }
-        return false;
     }
     
     // Funcion para pedir una cadena con un mensaje especifico
@@ -355,5 +353,26 @@ public class GhostGame {
         System.out.print(mensaje);
         int numero = input.nextByte();
         return numero;
+    }
+    
+    //Funcion temporal para verificar la posicion 
+    public boolean verificarPosicion(int fila, int columna) {
+        if ((fila >= 0 && fila <= 1) || (fila >= 4 && fila <= 5)) {
+            if (columna >= 1 && columna <= 4) {
+                System.out.println("Coordenada aceptada ["+fila+"]["+columna+"]");
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    //Funcion temporal
+    public void listarFantasmas(Ghost[] fantasmasJdr) {
+        System.out.println("FANTASMAS");
+        for(Ghost ghost: fantasmasJdr) {
+            System.out.println(ghost.getEstado());
+            System.out.println(ghost.getImagen());
+            System.out.println(ghost.getJugador());
+        }
     }
 }

@@ -1,10 +1,8 @@
 package principal;
 
+/** @author Joe Corrales */
 import java.util.ArrayList;
-/**
- *
- * @author Joe Corrales
- */
+
 public class Player {
     private String username;
     private String password;

@@ -1,11 +1,9 @@
 package uimenu;
 
+/** @author Joe Corrales */
 import java.util.Scanner;
 import principal.GhostGame;
 
-/**
- * @author Joe Corrales
- */
 public class Menu {
     //Instancias de objetos
     Scanner input = new Scanner(System.in);

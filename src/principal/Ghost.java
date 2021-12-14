@@ -1,16 +1,12 @@
 package principal;
 
-/**
- *
- * @author Joe Corrales
- */
+/** @author Joe Corrales */
+
 public class Ghost {
     //Atributo
     private String jugador;
     private String estado;
     private String imagen;
-//    private int fila;
-//    private int columna;
     
     Ghost(String imagen, String estado, String jugador) {
         this.imagen = imagen;
