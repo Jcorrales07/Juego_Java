@@ -33,8 +33,12 @@ public class GhostGame {
         while(true) {
             mostrarTurno(turno);
             
-            if (turno)coorSeleccion(true, Jugador1); //Empieza el jugador 1
-            else coorSeleccion(false, Jugador2); //Luego el jugador 2
+            if (turno) {
+                coorSeleccion(true, Jugador1);
+            } //Empieza el jugador 1
+            else {
+                coorSeleccion(false, Jugador2);
+            } //Luego el jugador 2
 
             turno = !turno; // cambio de turno
         }
@@ -212,6 +216,7 @@ public class GhostGame {
         if (validMove(f, c, f2, c2)) {
             // Y la posicion a mover no tiene un fantasma del mismo jugador
             if (!validUserToken(tablero, f2, c2, Jugador)) {
+                alerta(tablero, f2, c2);    
                 this.turno = turno; //Si se hace bien el movimiento se cambia de turno
                 tablero[(f2-1)][(c2-1)] = tablero[(f-1)][(c-1)]; //se pone el fantasma en la posicion pedida
                 tablero[(f-1)][(c-1)] = new Ghost(posVacia, "vacio", "ninguno"); //se remplaza por un espacio vario
@@ -244,7 +249,14 @@ public class GhostGame {
         }
     }
     
-    
+    public void alerta(Ghost[][] matriz, int f2, int c2) {
+        String estado = matriz[(f2-1)][(c2-1)].getEstado();
+        String Jdr = matriz[(f2-1)][(c2-1)].getJugador();
+        if (!matriz[(f2-1)][(c2-1)].getJugador().equals("ninguno")) {
+            System.out.println("\n[!][!][!][!][!][!][!][!][!]][!][!][!][!][!]"
+                   +"\n»»Te comiste un fantasma ["+estado+"] de {"+Jdr+"}««");
+        }
+    }
     
     //Funcion para mostrar los movimientos posibles que tiene su ficha
     //HACER QUE MUESTRE SOLO DONDE PUEDA MOVER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -259,13 +271,10 @@ public class GhostGame {
     
     //Funcion para que la coordenada de movimiento sea solo una casilla y no en diagonal
     public boolean validMove(int f, int c, int f2, int c2) {
-        if (((f2 == f-1)||(f2 == f+1)) && (c == c2)) { // se mueve entre columnas
-            return true;
-        } else if ((f == f2) && ((c2 == c-1)||(c2 == c+1))) { // se mueve entre filas
-            return true;
-        } else if (f == f2 && c == c2) // no permite moverse al mismo lugar
-            return false;
-        else return false; // no permite movimientos en diagonal
+        if (((f2 == f-1)||(f2 == f+1))&&(c == c2)) return true; // se mueve entre columnas    
+        else if ((f == f2)&&((c2 == c-1)||(c2 == c+1))) return true;  // se mueve entre filas
+        else if (f == f2 && c == c2) return false; // no permite moverse al mismo lugar  
+        else return false; // no permite movimientos en diagonal o mas de una casilla
     }
     
     public void mostrarTurno(boolean turno){
@@ -303,31 +312,26 @@ public class GhostGame {
     public void fantasmasActuales(Ghost[][] matriz) {
         for (int f = 0; f < matriz.length; f++) {
             for (int c = 0;c < matriz.length;c++) {
-                if (matriz[f][c].getEstado().equals("Bueno") && matriz[f][c].getJugador().equals(nomJdr1)) {
-                    fBuenosJdr1++;
-                } else if (matriz[f][c].getEstado().equals("Bueno") && matriz[f][c].getJugador().equals(nomJdr2)) {
-                    fBuenosJdr2++;
-                } else if(matriz[f][c].getEstado().equals("Malo") && matriz[f][c].getJugador().equals(nomJdr1)) {
-                    fMalosJdr1++;
-                } else if (matriz[f][c].getEstado().equals("Malo") && matriz[f][c].getJugador().equals(nomJdr2)) {
-                    fMalosJdr2++;
-                }
+                if (matriz[f][c].getEstado().equals("Bueno") && matriz[f][c].getJugador().equals(nomJdr1)) fBuenosJdr1++;
+                else if (matriz[f][c].getEstado().equals("Bueno") && matriz[f][c].getJugador().equals(nomJdr2)) fBuenosJdr2++;
+                else if(matriz[f][c].getEstado().equals("Malo") && matriz[f][c].getJugador().equals(nomJdr1)) fMalosJdr1++;
+                else if (matriz[f][c].getEstado().equals("Malo") && matriz[f][c].getJugador().equals(nomJdr2)) fMalosJdr2++;
             }
         }
     }
     
+    //Funcion para saber como va la partida
     public void imprimirActual() {
         fBuenosJdr1 = 0; fBuenosJdr2 = 0; fMalosJdr1 = 0; fMalosJdr2 = 0;
         fantasmasActuales(tablero);
         System.out.println("Jugador 1: "+ nomJdr1 +"\t\tJugador 2: "+ nomJdr2 +"\n"
-            +"Ghosts Buenos: "+ fBuenosJdr1 +"\tGhosts Buenos: "+ fBuenosJdr2
-            +"\nGhosts Malos: "+ fMalosJdr1 +"\t\tGhosts Malos: "+ fMalosJdr2);
+                +"Ghosts Buenos: "+ fBuenosJdr1 +"\tGhosts Buenos: "+ fBuenosJdr2
+                +"\nGhosts Malos: "+ fMalosJdr1 +"\t\tGhosts Malos: "+ fMalosJdr2);
     }
     
     //Funcion para crear los fantasmas de cada Jugador
     public void fabricaFantasmas(int cantFantasmas) {
-        //Se le asignan los espacios a los arreglos
-        fantasmasJ1 = new Ghost[cantFantasmas];
+        fantasmasJ1 = new Ghost[cantFantasmas]; //Asignacion de arreglos
         fantasmasJ2 = new Ghost[cantFantasmas];
         
         for (int i = 0; i < cantFantasmas; i++) {
