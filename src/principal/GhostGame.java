@@ -53,16 +53,13 @@ public class GhostGame {
     
     // Funcion que verifica si el usuario existe, retorna true o false dependiendo.
     public boolean verificarUsuario(String username) {
-        Jugador2 = buscarUsuario(username);
         return buscarUsuario(username) != null;
     }
     
     // Funcion para INICIAR SESION
     public boolean iniciarSesion(String username) { // se ingresa el usuario
-        usuarios[0] = new Player("Joe07", "123"); // TEMPORAL
-        usuarios[1] = new Player("Ian", "123");// TEMPORAL
-        Jugador1 = buscarUsuario(username); 
         if (verificarUsuario(username)) { // si el OBJETO jugador no esta vacio
+            Jugador1 = buscarUsuario(username);
             nomJdr1 = Jugador1.getUsername();
             password = myNextString("╠╬══╣Ingrese su contraseña\n: "); // se le pide la contraseña
             // si la contraseña es igual al que tiene el objeto jugador...
@@ -83,7 +80,7 @@ public class GhostGame {
                 if (usuarios[i] == null) { 
                     password = myNextString("╠╬══╣Ingrese su contraseña\n: "); 
                     usuarios[i] = new Player(username, password); //Registra el nuevo usuario
-                    Jugador1 = buscarUsuario(username); 
+                    Jugador1 = buscarUsuario(username); nomJdr1 = Jugador1.getUsername();
                     codigo = i; // guarda la posicion en la coleccion... se usa para la funcion de borrar
                     System.out.println("     Usuario correctamente creado! ®");
                     return true;
@@ -147,6 +144,7 @@ public class GhostGame {
     //Funcion para dar acceso al Juego
     public void accesoAlJuego() {
         username = myNextString("\n╠╬══╣Ingrese el usuario del Jugador 2\n: ");
+        Jugador2 = buscarUsuario(username);
         if (verificarUsuario(username) && !(Jugador1.getUsername().equals(username))) {
             nomJdr2 = Jugador2.getUsername();
             System.out.println();
@@ -172,7 +170,7 @@ public class GhostGame {
     //Funcion para establecer el modo de juego
     public void modoJuego() {
         if (modoJuego) modoManual("\n     MODO DE JUEGO: MANUAL");
-        else modoAleatorio("\n     MODO DE JUEGO: ALEATORIO\n");
+        else modoAleatorio("\n     MODO DE JUEGO: ALEATORIO");
     }
     
     //Funcion para seleccionar un fantasma
@@ -180,12 +178,14 @@ public class GhostGame {
         f = myNextInt("    ╠╬══╣SELECCIONE UN FANTASMA╠══╬╣\nFila: ");
         c = myNextInt("Columna: ");
         // Si la coordenada esta en el rango y el fantasma es del mismo jugador
-        if (coordenada(f, c) && validUserToken(tablero, f, c, Jugador)) {
+        if (!((f == -1)||(c == -1))) {
+            if (coordenada(f, c) && validUserToken(tablero, f, c, Jugador)) {
             coorMovimiento(f, c, turno, Jugador);
-        } else {
-            System.out.println("Ingresa otra coordenada");
-            coorSeleccion(turno, Jugador);
-        }
+            } else {
+                System.out.println("Ingresa otra coordenada");
+                coorSeleccion(turno, Jugador);
+            }
+        } 
     }
     
     //Funcion para validar si la coordenada ingresada esta en el rango
@@ -198,26 +198,45 @@ public class GhostGame {
         return matriz[(f-1)][(c-1)].getJugador().equals(Jugador.getUsername());
     }
     
+    public boolean retiro(int f, int c) {
+        if(((f == -1)||(c == -1))) {
+            System.out.print("\nTe retiraras de la partida \nEstas seguro? [S/N]: ");
+            char resp = input.next().toLowerCase().charAt(0);
+            if (resp == 's') {
+                if (turno) {
+                    System.out.println("Ganador: "+nomJdr1+"!!!\nObtiene 3 pts\nPor que "+nomJdr2+" se retiro");
+                    Jugador1.set3Pts();
+                    return true;
+                } else {
+                    System.out.println("Ganador: "+nomJdr2+"!!!\nObtiene 3 pts\nPor que "+nomJdr1+" se retiro");
+                    Jugador2.set3Pts();
+                    return true;
+                }
+            } 
+        }
+        return false;
+    }
+       
     //Funcion para mover un fantasma
-    public void coorMovimiento(int f, int c, boolean turno, Player Jugador) {
-        pMovimientos(f, c); // se le muestran los movimientos disponibles // BETA
+    public void coorMovimiento(int f, int c, boolean turno, Player Jdr1) {
+        pMovimientos(f, c, Jdr1); // se le muestran los movimientos disponibles // BETA
         f2 = myNextInt("    ╠╬══╣MUEVA UN FANTASMA╠══╬╣\nFila: ");
         c2 = myNextInt("Columna: ");
         // Si la coordenada de movimiento es valida 
         if (validMove(f, c, f2, c2)) {
             // Y la posicion a mover no tiene un fantasma del mismo jugador
-            if (!validUserToken(tablero, f2, c2, Jugador)) {
+            if (!validUserToken(tablero, f2, c2, Jdr1)) {
                 alerta(tablero, f2, c2);    
                 this.turno = turno; //Si se hace bien el movimiento se cambia de turno
                 tablero[(f2-1)][(c2-1)] = tablero[(f-1)][(c-1)]; //se pone el fantasma en la posicion pedida
                 tablero[(f-1)][(c-1)] = new Ghost(posVacia, "vacio", "ninguno"); //se remplaza por un espacio vario
                 mostrarMatriz(tablero);
-            } else errOpcion("Tienes una ficha ahi", Jugador);// si no se muestra 
-        } else errOpcion("No te puedes mover ahi", Jugador);
+            } else errOpcion("\n[!] Tienes una ficha ahi\n", Jdr1);// si no se muestra 
+        } else errOpcion("\n[!] No te puedes mover ahi\n", Jdr1);
     }
     
     //Funcion para mostrar las opciones si se ingresa mal una coordenada
-    public void errOpcion(String mensaje, Player Jugador) {
+    public void errOpcion(String mensaje, Player Jdr) {
         boolean repetir = true;
         while(repetir) {
             opcion = myNextInt(mensaje+"\nOPCIONES:"
@@ -227,12 +246,12 @@ public class GhostGame {
                 case 1:
                     repetir = false;
                     mostrarMatriz(tablero);
-                    coorMovimiento(f, c, turno, Jugador);
+                    coorMovimiento(f, c, turno, Jdr);
                     break;
                 case 2:
                     repetir = false;
                     mostrarMatriz(tablero);
-                    coorSeleccion(turno, Jugador);
+                    coorSeleccion(turno, Jdr);
                     break;
                 default:
                     System.out.println("No disponible");
@@ -253,12 +272,12 @@ public class GhostGame {
     //Funcion para indicar si un jugador se comieron TODOS los fantasma BUENOS del otro
     public boolean winSituacionUno() {
         if ((fBuenosJdr1 != 0)&&(fBuenosJdr2 == 0)) { // ganador Jugador 1
-            System.out.println("\nGanador : "+nomJdr1+"!!! \nObtiene 3 pts\nPor que se comio todos los fantasmas buenos de "+nomJdr2);
-            Jugador1.setPts();
+            System.out.println("\nGanador : "+nomJdr1+"!!! \nObtiene 3 pts\nPor que se comio todas las Punks Buenos de "+nomJdr2);
+            Jugador1.set3Pts();
             return true;
         } else if ((fBuenosJdr2 != 0)&&(fBuenosJdr1 == 0)) { // ganador Jugador 2
-            System.out.println("\nGanador : "+nomJdr2+"!!! \nObtiene 3 pts\nPor que se comio todos los fantasmas buenos de "+nomJdr1);
-            Jugador2.setPts();
+            System.out.println("\nGanador : "+nomJdr2+"!!! \nObtiene 3 pts\nPor que se comio todos los Aliens Buenos de "+nomJdr1);
+            Jugador2.set3Pts();
             return true;
         }
         return false;
@@ -268,11 +287,11 @@ public class GhostGame {
     public boolean winSituacionDos() {
         if ((fMalosJdr1 == 0)&&(fMalosJdr2 != 0)) {
             System.out.println("\nGanador: "+nomJdr1+"!!!\nObtiene 3 pts\nPor que "+nomJdr2 +" le comio todos los Aliens Malos");
-            Jugador1.setPts();
+            Jugador1.set3Pts();
             return true; 
         } else if ((fMalosJdr2 == 0)&&(fMalosJdr2 != 0)) {
             System.out.println("\nGanador: "+nomJdr2+"!!!\nObtiene 3 pts\nPor que "+nomJdr1+" le comio todos los Punks Malos");
-            Jugador2.setPts();
+            Jugador2.set3Pts();
             return true;
         }
         return false;
@@ -282,11 +301,11 @@ public class GhostGame {
     public boolean winSituacionTres() {
         if (winStJdr(0, 0, 0, 5, nomJdr1)) {
             System.out.println("\nGanador: "+ nomJdr1+"!!!\nObtiene 3 pts\nlogro sacar un Alien Bueno por el lado contrario");
-            Jugador1.setPts();
+            Jugador1.set3Pts();
             return true;
         } else if (winStJdr(5, 0, 5, 5, nomJdr2)) {
             System.out.println("\nGanador: "+ nomJdr2+"!!!\nObtiene 3 pts\nlogro sacar un Punk Bueno por el lado contrario");
-            Jugador2.setPts();
+            Jugador2.set3Pts();
             return true;
         }
         return false;
@@ -294,14 +313,15 @@ public class GhostGame {
     
     //Funcion para saber si un fantasma bueno cruza por el lado contrario
     public boolean winStJdr(int f1, int c1, int f2, int c2, String Jdr) {
-        if (tablero[f1][c1].getEstado().equals("Bueno")&&tablero[f1][c1].getJugador().equals(Jdr)) return true;
-        else if (tablero[f2][c2].getEstado().equals("Bueno")&&tablero[f2][c2].getJugador().equals(Jdr)) return true;
+        if (tablero[f1][c1].getEstado().equals("Buena")&&tablero[f1][c1].getJugador().equals(Jdr)) return true;
+        else if (tablero[f2][c2].getEstado().equals("Buena")&&tablero[f2][c2].getJugador().equals(Jdr)) return true;
         return false;
     }
     
     //Funcion que se ejecuta cada turno para saber si hay un ganador
     public boolean hayGanador() { 
-        if (winSituacionUno()) return false; //Si hay un ganador entonces se para el ciclo de turnos
+        if (retiro(f, c)) return false;
+        else if (winSituacionUno()) return false; //Si hay un ganador entonces se para el ciclo de turnos
         else if (winSituacionDos()) return false;
         else if (winSituacionTres()) return false;
         return true; // si no, sigue normal el flujo
@@ -309,13 +329,13 @@ public class GhostGame {
     
     //Funcion para mostrar los movimientos posibles que tiene su ficha
     //HACER QUE MUESTRE SOLO DONDE PUEDA MOVER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    public void pMovimientos(int f, int c) {
+    public void pMovimientos(int f, int c, Player Jugador) {
         //Posibles Filas//Posibles Columnas
         int pF1 = f-1; int pC1 = c-1;
-        int pF2 = f+1; int pC2 = c+1;
+        int pF2 = f+1; int pC2 = c+1;        
         System.out.println("     ["+pF1+","+c+"]\n"+"       🢁\n"
-                +"["+f+","+pC1+"]🢀  🢂["+f+","+pC2+"]\n"
-                +"       🢃\n     ["+pF2+","+c+"]");
+                + "["+f+","+pC1+"]🢀  🢂["+f+","+pC2+"]\n"
+                + "       🢃\n     ["+pF2+","+c+"]\n");
     }
     
     //Funcion para que la coordenada de movimiento sea solo una casilla y no en diagonal
@@ -350,6 +370,7 @@ public class GhostGame {
     
     // Funcion para mostrar el tablero actualizado... cada ciclo itera y actualiza el tablero...
     public void mostrarMatriz(Ghost[][] matriz) {
+        System.out.println();
         for (int f = 0; f < matriz.length; f++) {
             for (int c = 0; c < matriz.length; c++) 
                 System.out.print("  "+ matriz[f][c].getImagen()+"  ");
@@ -362,10 +383,10 @@ public class GhostGame {
     public void fantasmasActuales(Ghost[][] matriz) {
         for (int f = 0; f < matriz.length; f++) {
             for (int c = 0;c < matriz.length;c++) {
-                if (matriz[f][c].getEstado().equals("Bueno") && matriz[f][c].getJugador().equals(nomJdr1)) fBuenosJdr1++;
-                else if (matriz[f][c].getEstado().equals("Bueno") && matriz[f][c].getJugador().equals(nomJdr2)) fBuenosJdr2++;
-                else if(matriz[f][c].getEstado().equals("Malo") && matriz[f][c].getJugador().equals(nomJdr1)) fMalosJdr1++;
-                else if (matriz[f][c].getEstado().equals("Malo") && matriz[f][c].getJugador().equals(nomJdr2)) fMalosJdr2++;
+                if (matriz[f][c].getEstado().equals("Buena") && matriz[f][c].getJugador().equals(nomJdr1)) fBuenosJdr1++;
+                else if (matriz[f][c].getEstado().equals("Buena") && matriz[f][c].getJugador().equals(nomJdr2)) fBuenosJdr2++;
+                else if(matriz[f][c].getEstado().equals("Mala") && matriz[f][c].getJugador().equals(nomJdr1)) fMalosJdr1++;
+                else if (matriz[f][c].getEstado().equals("Mala") && matriz[f][c].getJugador().equals(nomJdr2)) fMalosJdr2++;
             }
         }
     }
@@ -386,11 +407,11 @@ public class GhostGame {
         
         for (int i = 0; i < cantFantasmas; i++) {
             if (i % 2 == 0) { // Si la i no da residuo se crean fantasmas buenos
-                fantasmasJ1[i] = new Ghost("👽", "Bueno", Jugador1.getUsername());
-                fantasmasJ2[i] = new Ghost("🎃", "Bueno", Jugador2.getUsername());
+                fantasmasJ1[i] = new Ghost("👽", "Buena", Jugador1.getUsername());
+                fantasmasJ2[i] = new Ghost("🎃", "Buena", Jugador2.getUsername());
             } else { //si no, fantasmas malos
-                fantasmasJ1[i] = new Ghost("👽", "Malo", Jugador1.getUsername());
-                fantasmasJ2[i] = new Ghost("🎃", "Malo", Jugador2.getUsername());
+                fantasmasJ1[i] = new Ghost("👽", "Mala", Jugador1.getUsername());
+                fantasmasJ2[i] = new Ghost("🎃", "Mala", Jugador2.getUsername());
             }
         }
     }
@@ -508,7 +529,7 @@ public class GhostGame {
     // Funcion para pedir un byte con un mensaje especifico
     public int myNextInt(String mensaje) {
         System.out.print(mensaje);
-        int numero = input.nextByte();
+        int numero = input.nextInt();
         return numero;
     }
 }

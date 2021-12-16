@@ -55,15 +55,13 @@ public class Player {
     
     // Otras Funciones
     public void mostrarDatos() {
-        System.out.println("\n╠╩═╩╬═══════════════════════╬╩═╩╣");
-        System.out.println("╠═◘═╬╣DATOS DEL JUGADOR╠╬═◘═╣");
-        System.out.println("╠╦═╦╬═══════════════════════╬╦═╦╣\n");
-        System.out.println("Usuario: "+ username
-                        +"\nContraseña: "+ password
-                        +"\nPuntaje: "+ score); 
+        System.out.println("\n╠═◘═╬╣DATOS DEL JUGADOR╠╬═◘═╣"
+                + "\nUsuario: "+ username
+                +"\nContraseña: "+ password
+                +"\nPuntaje: "+ score);
     }
     
-    public void setPts() {
+    public void set3Pts() {
         this.score += 3;
     }
 
