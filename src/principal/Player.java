@@ -62,4 +62,9 @@ public class Player {
                         +"\nContraseña: "+ password
                         +"\nPuntaje: "+ score); 
     }
+    
+    public void setPts() {
+        this.score += 3;
+    }
+
 }

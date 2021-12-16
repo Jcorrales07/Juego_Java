@@ -30,15 +30,11 @@ public class GhostGame {
         inicioPartida();
         crearTDFantasmas();
         modoJuego();
-        while(true) {
+        while(hayGanador()) {
             mostrarTurno(turno);
             
-            if (turno) {
-                coorSeleccion(true, Jugador1);
-            } //Empieza el jugador 1
-            else {
-                coorSeleccion(false, Jugador2);
-            } //Luego el jugador 2
+            if (turno) coorSeleccion(true, Jugador1); //Empieza el jugador 1
+            else coorSeleccion(false, Jugador2); //Luego el jugador 2
 
             turno = !turno; // cambio de turno
         }
@@ -258,6 +254,62 @@ public class GhostGame {
         }
     }
     
+    //Funcion para indicar si un jugador se comieron TODOS los fantasma BUENOS del otro
+    public boolean winSituacionUno() {
+        if ((fBuenosJdr1 != 0)&&(fBuenosJdr2 == 0)) { // ganador Jugador 1
+            System.out.println("\nGanador : "+nomJdr1+"!!! \nObtiene 3 pts\nPor que se comio todos los fantasmas buenos de "+nomJdr2);
+            Jugador1.setPts();
+            return true;
+        } else if ((fBuenosJdr2 != 0)&&(fBuenosJdr1 == 0)) { // ganador Jugador 2
+            System.out.println("\nGanador : "+nomJdr2+"!!! \nObtiene 3 pts\nPor que se comio todos los fantasmas buenos de "+nomJdr1);
+            Jugador2.setPts();
+            return true;
+        }
+        return false;
+    }
+    
+    //Funcion para indicar si un jugador le comieron TODOS los fantasma MALOS
+    public boolean winSituacionDos() {
+        if ((fMalosJdr1 == 0)&&(fMalosJdr2 != 0)) {
+            System.out.println("\nGanador: "+nomJdr1+"!!!\nObtiene 3 pts\nPor que "+nomJdr2 +" le comio todos los fantasmas malos");
+            Jugador1.setPts();
+            return true; 
+        } else if ((fMalosJdr2 == 0)&&(fMalosJdr2 != 0)) {
+            System.out.println("\nGanador: "+nomJdr2+"!!!\nObtiene 3 pts\nPor que "+nomJdr1+" le comio todos los fantasmas malos");
+            Jugador2.setPts();
+            return true;
+        }
+        return false;
+    }
+    
+    //Funcion para indicar si un fantasma bueno cruzo por el 
+    public boolean winSituacionTres() {
+        if (winStJdr(0, 0, 0, 5, nomJdr1)) {
+            System.out.println("\nGanador: "+ nomJdr1+"!!!\nObtiene 3 pts\nlogro sacar un fantasma bueno por el lado contrario");
+            Jugador1.setPts();
+            return true;
+        } else if (winStJdr(5, 0, 5, 5, nomJdr2)) {
+            System.out.println("\nGanador: "+ nomJdr2+"!!!\nObtiene 3 pts\nlogro sacar un fantasma bueno por el lado contrario");
+            Jugador2.setPts();
+            return true;
+        }
+        return false;
+    }
+    
+    //Funcion para saber si un fantasma bueno cruza por el lado contrario
+    public boolean winStJdr(int f1, int c1, int f2, int c2, String Jdr) {
+        if (tablero[f1][c1].getEstado().equals("Bueno")&&tablero[f1][c1].getJugador().equals(Jdr)) return true;
+        else if (tablero[f2][c2].getEstado().equals("Bueno")&&tablero[f2][c2].getJugador().equals(Jdr)) return true;
+        return false;
+    }
+    
+    public boolean hayGanador() {
+        if (winSituacionUno()) return false;
+        else if (winSituacionDos()) return false;
+        else if (winSituacionTres()) return false;
+        return true;
+    }
+    
     //Funcion para mostrar los movimientos posibles que tiene su ficha
     //HACER QUE MUESTRE SOLO DONDE PUEDA MOVER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     public void pMovimientos(int f, int c) {
@@ -278,8 +330,8 @@ public class GhostGame {
     }
     
     public void mostrarTurno(boolean turno){
-        if (turno) System.out.println("\tTurno de "+ nomJdr1);
-        else System.out.println("\tTurno de "+ nomJdr2);
+        if (turno) System.out.println("\n\tTurno de "+ nomJdr1);
+        else System.out.println("\n\tTurno de "+ nomJdr2);
     }
     
     //Funcion para rellenar las posiciones
@@ -309,6 +361,7 @@ public class GhostGame {
         imprimirActual();
     }
     
+    //Funcion para mostrar los fantasmas actuales en la partida
     public void fantasmasActuales(Ghost[][] matriz) {
         for (int f = 0; f < matriz.length; f++) {
             for (int c = 0;c < matriz.length;c++) {
@@ -362,7 +415,7 @@ public class GhostGame {
     //Funcion para insertar los fantamas en alguna casilla disponibles
     public void insertarEn(Ghost[][] matriz, Ghost[] fantasmasJdr, String[] posicionesJdr) {
         for (int i = 0; i < fantasmasJdr.length; i++) { // Para la cantidad de fantasmas que tenga el arreglo
-            listarPosiciones(posicionesJdr); // se estara listando las posiciones disponibles
+            listarPosiciones(posicionesJdr); // Se estara listando las posiciones disponibles
             if (i % 2 == 0) System.out.println("\nColocar Fantasma BUENO"); // se intercala para poner un fantasma bueno
             else System.out.println("Colocar Fantasma MALO"); // y luego malo
             this.f = myNextInt("Seleccionar Fila: ");
