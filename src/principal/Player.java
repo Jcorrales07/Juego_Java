@@ -6,11 +6,13 @@ import java.util.ArrayList;
 public class Player {
     private String username;
     private String password;
-    private double score;
+    private int score;
     private int dificultad;
     //Array dinamico para almacenar los resultados de los juegos
-    ArrayList<String> logrosFinales = new ArrayList<>();
+    ArrayList<String> reportes = new ArrayList<>();
    
+    public Player() {}
+    
     public Player(String username, String password) {
         this.username = username;
         this.password = password;
@@ -37,11 +39,11 @@ public class Player {
     }
     
     // SET y GET de score
-    public double getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(int score) {
         this.score = score;
     }
     
@@ -65,4 +67,15 @@ public class Player {
         this.score += 3;
     }
 
+    //Funcion para listar los ultimos 10 juegos
+    public void ultimosJuegos(String username) {
+        if (reportes.size() > 0) {
+            for(int i = 0; i < reportes.size(); i++) {
+                if (reportes.get(i).contains(username)) {
+                    System.out.println((i+1)+". "+reportes.get(i));
+                }
+            }
+        } else System.out.println("\n     NO HAY REPORTES!");
+    }
+    
 }

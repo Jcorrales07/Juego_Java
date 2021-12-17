@@ -104,15 +104,17 @@ public class Menu {
                 case 3://REPORTES
                     do {
                         opcion = func.myNextInt("\n\t╠╬══╣REPORTES╠══╬╣"
-                            + "\n\t1) Descripcion de mis ultimos 10 juegos"
-                            + "\n\t2) Ranking de Jugadores"
-                            + "\n\t3) Regresar al Menu Principal"
+                            + "\n 1) Descripcion de mis ultimos 10 juegos"
+                            + "\n 2) Ranking de Jugadores"
+                            + "\n 3) Regresar al Menu Principal"
                             + "\nOPCION #");
                     
                         switch (opcion) {
                             case 1://ULTIMOS JUEGOS
+                                func.imprimirReportes();
                                 break;
                             case 2://RANKING
+                                func.rankingJdrs();
                                 break;
                             case 3:
                                 repetir = false;

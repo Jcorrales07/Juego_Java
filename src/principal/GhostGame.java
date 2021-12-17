@@ -2,11 +2,13 @@ package principal;
 
 /** @author Joe Corrales */
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class GhostGame {
     Scanner input = new Scanner(System.in);
     //Coleccion de usuarios
     private Player[] usuarios = new Player[100];
+    Player mi = new Player();
     //Colecciones de los fantasmas de cada Jugador
     Ghost[] fantasmasJ1; Ghost[] fantasmasJ2;
     //La matriz del tipo Ghost de 6x6
@@ -30,12 +32,11 @@ public class GhostGame {
         inicioPartida();
         crearTDFantasmas();
         modoJuego();
-        while(hayGanador()) {
+        
+        while(hayGanador()) { // si hay ganador entonces se detiene
             mostrarTurno(turno);
-            
             if (turno) coorSeleccion(true, Jugador1); //Empieza el jugador 1
             else coorSeleccion(false, Jugador2); //Luego el jugador 2
-
             turno = !turno; // cambio de turno
         }
     }
@@ -198,25 +199,6 @@ public class GhostGame {
         return matriz[(f-1)][(c-1)].getJugador().equals(Jugador.getUsername());
     }
     
-    public boolean retiro(int f, int c) {
-        if(((f == -1)||(c == -1))) {
-            System.out.print("\nTe retiraras de la partida \nEstas seguro? [S/N]: ");
-            char resp = input.next().toLowerCase().charAt(0);
-            if (resp == 's') {
-                if (turno) {
-                    System.out.println("Ganador: "+nomJdr1+"!!!\nObtiene 3 pts\nPor que "+nomJdr2+" se retiro");
-                    Jugador1.set3Pts();
-                    return true;
-                } else {
-                    System.out.println("Ganador: "+nomJdr2+"!!!\nObtiene 3 pts\nPor que "+nomJdr1+" se retiro");
-                    Jugador2.set3Pts();
-                    return true;
-                }
-            } 
-        }
-        return false;
-    }
-       
     //Funcion para mover un fantasma
     public void coorMovimiento(int f, int c, boolean turno, Player Jdr1) {
         pMovimientos(f, c, Jdr1); // se le muestran los movimientos disponibles // BETA
@@ -269,14 +251,42 @@ public class GhostGame {
         }
     }
     
+    //Funcion para saber si un Jugador se retira
+    public boolean retiro(int f, int c) {
+        if(((f == -1)||(c == -1))) {
+            System.out.print("\nTe retiraras de la partida \nEstas seguro? [S/N]: ");
+            char resp = input.next().toLowerCase().charAt(0);
+            if (resp == 's') {
+                if (turno) {
+                    System.out.println("Ganador: "+nomJdr1+"!!!\nPor que "+nomJdr2+" se retiro");
+                    mi.reportes.add("Ganador: "+nomJdr1+", Por que "+nomJdr2+" se retiro");
+                    System.out.println("+3 Pts");
+                    Jugador1.set3Pts();
+                    return true;
+                } else {
+                    System.out.println("Ganador: "+nomJdr2+"!!!\nPor que "+nomJdr1+" se retiro");
+                    mi.reportes.add("Ganador: "+nomJdr2+", Por que "+nomJdr1+" se retiro");
+                    System.out.println("+3 Pts");
+                    Jugador2.set3Pts();
+                    return true;
+                }
+            } 
+        }
+        return false;
+    }
+    
     //Funcion para indicar si un jugador se comieron TODOS los fantasma BUENOS del otro
     public boolean winSituacionUno() {
         if ((fBuenosJdr1 != 0)&&(fBuenosJdr2 == 0)) { // ganador Jugador 1
-            System.out.println("\nGanador : "+nomJdr1+"!!! \nObtiene 3 pts\nPor que se comio todas las Punks Buenos de "+nomJdr2);
+            System.out.println("\nGanador : "+nomJdr1+"!!!\nPor que se comio todas las Punks Buenos de "+nomJdr2);
+            mi.reportes.add("Ganador : "+nomJdr1+", Por que se comio todas las Punks Buenos de "+nomJdr2);            
+            System.out.println("+3 Pts");
             Jugador1.set3Pts();
             return true;
         } else if ((fBuenosJdr2 != 0)&&(fBuenosJdr1 == 0)) { // ganador Jugador 2
-            System.out.println("\nGanador : "+nomJdr2+"!!! \nObtiene 3 pts\nPor que se comio todos los Aliens Buenos de "+nomJdr1);
+            System.out.println("\nGanador : "+nomJdr2+"!!!\nPor que se comio todos los Aliens Buenos de "+nomJdr1);
+            mi.reportes.add("Ganador : "+nomJdr2+", Por que se comio todos los Aliens Buenos de "+nomJdr1);
+            System.out.println("+3 Pts");
             Jugador2.set3Pts();
             return true;
         }
@@ -286,11 +296,15 @@ public class GhostGame {
     //Funcion para indicar si un jugador le comieron TODOS los fantasma MALOS
     public boolean winSituacionDos() {
         if ((fMalosJdr1 == 0)&&(fMalosJdr2 != 0)) {
-            System.out.println("\nGanador: "+nomJdr1+"!!!\nObtiene 3 pts\nPor que "+nomJdr2 +" le comio todos los Aliens Malos");
+            System.out.println("\nGanador: "+nomJdr1+"!!!\nPor que "+nomJdr2 +" le comio todos los Aliens Malos");
+            mi.reportes.add("Ganador: "+nomJdr1+", Por que "+nomJdr2+" le comio todos los Aliens Malos");
+            System.out.println("+3 Pts");
             Jugador1.set3Pts();
             return true; 
         } else if ((fMalosJdr2 == 0)&&(fMalosJdr2 != 0)) {
-            System.out.println("\nGanador: "+nomJdr2+"!!!\nObtiene 3 pts\nPor que "+nomJdr1+" le comio todos los Punks Malos");
+            System.out.println("\nGanador: "+nomJdr2+"!!!\nPor que "+nomJdr1+" le comio todos los Punks Malos");
+            mi.reportes.add("Ganador: "+nomJdr2+", Por que "+nomJdr1+" le comio todos los Aliens Malos");
+            System.out.println("+3 Pts");
             Jugador2.set3Pts();
             return true;
         }
@@ -300,11 +314,15 @@ public class GhostGame {
     //Funcion para indicar si un fantasma bueno cruzo por el lado contrario del castillo
     public boolean winSituacionTres() {
         if (winStJdr(0, 0, 0, 5, nomJdr1)) {
-            System.out.println("\nGanador: "+ nomJdr1+"!!!\nObtiene 3 pts\nlogro sacar un Alien Bueno por el lado contrario");
+            System.out.println("\nGanador: "+ nomJdr1+"!!!\nlogro sacar un Alien Bueno por el lado contrario");
+            mi.reportes.add("Ganador: "+nomJdr2+", Por que "+nomJdr1+" le comio todos los Aliens Malos");
+            System.out.println("+3 Pts");
             Jugador1.set3Pts();
             return true;
         } else if (winStJdr(5, 0, 5, 5, nomJdr2)) {
-            System.out.println("\nGanador: "+ nomJdr2+"!!!\nObtiene 3 pts\nlogro sacar un Punk Bueno por el lado contrario");
+            System.out.println("\nGanador: "+ nomJdr2+"!!!\nlogro sacar un Punk Bueno por el lado contrario");
+            mi.reportes.add("Ganador: "+ nomJdr2+"!!!\nlogro sacar un Punk Bueno por el lado contrario");
+            System.out.println("+3 Pts");
             Jugador2.set3Pts();
             return true;
         }
@@ -320,7 +338,7 @@ public class GhostGame {
     
     //Funcion que se ejecuta cada turno para saber si hay un ganador
     public boolean hayGanador() { 
-        if (retiro(f, c)) return false;
+        if (retiro(f, c)) return false; //si se retira un jugador
         else if (winSituacionUno()) return false; //Si hay un ganador entonces se para el ciclo de turnos
         else if (winSituacionDos()) return false;
         else if (winSituacionTres()) return false;
@@ -515,6 +533,38 @@ public class GhostGame {
         for(String pos: posicionesJdr) {
             if (pos != null) {
                 System.out.println("\t» "+pos);
+            }
+        }
+    }
+    
+    //Funcion para imprimir los reportes
+    public void imprimirReportes() {
+        System.out.println("\n     MIS ULTIMOS DIEZ JUEGOS");
+        mi.ultimosJuegos(nomJdr1);
+    }
+    
+    public void rankingJdrs() {
+//        Player[] ranking = Arrays.copyOf(usuarios, usuarios.length);
+        Player aux;
+        for (int i = 0; i < (usuarios.length-1); i++) {
+            for (int j = 0; j < (usuarios.length-1); j++) {
+                if (usuarios[i].getUsername() != null ) {
+                    if (!(usuarios[j+1].getScore() == 0)) {
+                        if (usuarios[j].getScore() > usuarios[j+1].getScore()) {
+                        aux = usuarios[j];
+                        usuarios[j] = usuarios[j+1];
+                        usuarios[j+1] = aux;
+                        } else System.out.println("tranqui");
+                    }
+                }
+            }
+        }
+        
+        for (int i = usuarios.length-1; i >= 0; i--) {
+            int cont = 1;
+            if (usuarios[i] != null) {
+                System.out.println(cont+". "+ usuarios[i].getScore() +" pts "+ usuarios[i].getUsername());
+                cont++;
             }
         }
     }
