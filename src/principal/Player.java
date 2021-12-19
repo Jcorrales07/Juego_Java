@@ -70,12 +70,14 @@ public class Player {
     //Funcion para listar los ultimos 10 juegos
     public void ultimosJuegos(String username) {
         if (reportes.size() > 0) {
-            for(int i = 0; i < reportes.size(); i++) {
+            int it = 1;
+            for(int i = reportes.size()-1; i >= 0; i--) {
                 if (reportes.get(i).contains(username)) {
-                    System.out.println((i+1)+". "+reportes.get(i));
+                    System.out.println(it+". "+reportes.get(i));
+                    it++;
                 }
             }
-        } else System.out.println("\n     NO HAY REPORTES!");
+        } else System.out.println("\n\tNO HAY REPORTES!");
     }
     
 }

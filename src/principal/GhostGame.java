@@ -1,8 +1,8 @@
 package principal;
 
 /** @author Joe Corrales */
-import java.util.Scanner;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class GhostGame {
     Scanner input = new Scanner(System.in);
@@ -258,14 +258,14 @@ public class GhostGame {
             char resp = input.next().toLowerCase().charAt(0);
             if (resp == 's') {
                 if (turno) {
-                    System.out.println("Ganador: "+nomJdr1+"!!!\nPor que "+nomJdr2+" se retiro");
-                    mi.reportes.add("Ganador: "+nomJdr1+", Por que "+nomJdr2+" se retiro");
+                    System.out.println("\nGanador: "+nomJdr1+"!!!\nPor que "+nomJdr2+" se retiro");
+                    mi.reportes.add("\nGanador: "+nomJdr1+", Por que "+nomJdr2+" se retiro");
                     System.out.println("+3 Pts");
                     Jugador1.set3Pts();
                     return true;
                 } else {
-                    System.out.println("Ganador: "+nomJdr2+"!!!\nPor que "+nomJdr1+" se retiro");
-                    mi.reportes.add("Ganador: "+nomJdr2+", Por que "+nomJdr1+" se retiro");
+                    System.out.println("\nGanador: "+nomJdr2+"!!!\nPor que "+nomJdr1+" se retiro");
+                    mi.reportes.add("\nGanador: "+nomJdr2+", Por que "+nomJdr1+" se retiro");
                     System.out.println("+3 Pts");
                     Jugador2.set3Pts();
                     return true;
@@ -543,28 +543,11 @@ public class GhostGame {
         mi.ultimosJuegos(nomJdr1);
     }
     
+    //Funcion para el ranking
     public void rankingJdrs() {
-//        Player[] ranking = Arrays.copyOf(usuarios, usuarios.length);
-        Player aux;
-        for (int i = 0; i < (usuarios.length-1); i++) {
-            for (int j = 0; j < (usuarios.length-1); j++) {
-                if (usuarios[i].getUsername() != null ) {
-                    if (!(usuarios[j+1].getScore() == 0)) {
-                        if (usuarios[j].getScore() > usuarios[j+1].getScore()) {
-                        aux = usuarios[j];
-                        usuarios[j] = usuarios[j+1];
-                        usuarios[j+1] = aux;
-                        } else System.out.println("tranqui");
-                    }
-                }
-            }
-        }
-        
-        for (int i = usuarios.length-1; i >= 0; i--) {
-            int cont = 1;
+        for (int i = 0; i < usuarios.length; i++) {
             if (usuarios[i] != null) {
-                System.out.println(cont+". "+ usuarios[i].getScore() +" pts "+ usuarios[i].getUsername());
-                cont++;
+                System.out.println((i+1)+". "+ usuarios[i].getScore() +" pts "+ usuarios[i].getUsername());
             }
         }
     }
