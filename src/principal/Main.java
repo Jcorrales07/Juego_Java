@@ -1,6 +1,6 @@
 package principal;
 
-/** @author Joe Corrales */
+/* @author Joe Corrales */
 import uimenu.Menu;
 
 public class Main {

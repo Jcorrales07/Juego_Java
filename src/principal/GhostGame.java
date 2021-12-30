@@ -1,7 +1,6 @@
 package principal;
 
 /** @author Joe Corrales */
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class GhostGame {
@@ -104,13 +103,15 @@ public class GhostGame {
     }
     
     //Funcion para eliminar una cuenta
-    public void eliminarCuenta() {
+    public boolean eliminarCuenta() {
         System.out.print("\nADVERTENCIA: Borrara su cuenta, esto es irreversible. \nEsta seguro? [S/N]: ");
         char resp = input.next().toLowerCase().charAt(0);
         if (resp == 's') {
             usuarios[codigo] = null; // si da como respuesta SI, se borra la cuenta 
             System.out.println("HA BORRADO SU CUENTA");
+            return true;
         }
+        return false;
     }
     
     //Funcion para definir la dificultad
@@ -380,18 +381,18 @@ public class GhostGame {
     
     // Funcion para rellenar la matriz con "▄"
     public void matrizInicial(Ghost[][] matriz) {
-        for (int f = 0; f < matriz.length; f++) {
-            for (int c = 0; c < matriz.length; c++) 
-                matriz[f][c] = new Ghost(posVacia, "vacio", "ninguno"); //👻
+        for (int fi = 0; fi < matriz.length; fi++) {
+            for (int co = 0; co < matriz.length; co++) 
+                matriz[fi][co] = new Ghost(posVacia, "vacio", "ninguno"); //👻
         }
     }
     
     // Funcion para mostrar el tablero actualizado... cada ciclo itera y actualiza el tablero...
     public void mostrarMatriz(Ghost[][] matriz) {
         System.out.println();
-        for (int f = 0; f < matriz.length; f++) {
-            for (int c = 0; c < matriz.length; c++) 
-                System.out.print("  "+ matriz[f][c].getImagen()+"  ");
+        for (int fi = 0; fi < matriz.length; fi++) {
+            for (int co = 0; co < matriz.length; co++) 
+                System.out.print("  "+ matriz[fi][co].getImagen()+"  ");
             System.out.println("\n");
         }
         imprimirActual();
@@ -399,12 +400,12 @@ public class GhostGame {
     
     //Funcion para mostrar los fantasmas actuales en la partida
     public void fantasmasActuales(Ghost[][] matriz) {
-        for (int f = 0; f < matriz.length; f++) {
-            for (int c = 0;c < matriz.length;c++) {
-                if (matriz[f][c].getEstado().equals("Buena") && matriz[f][c].getJugador().equals(nomJdr1)) fBuenosJdr1++;
-                else if (matriz[f][c].getEstado().equals("Buena") && matriz[f][c].getJugador().equals(nomJdr2)) fBuenosJdr2++;
-                else if(matriz[f][c].getEstado().equals("Mala") && matriz[f][c].getJugador().equals(nomJdr1)) fMalosJdr1++;
-                else if (matriz[f][c].getEstado().equals("Mala") && matriz[f][c].getJugador().equals(nomJdr2)) fMalosJdr2++;
+        for (int fi = 0; fi < matriz.length; fi++) {
+            for (int co = 0; co < matriz.length; co++) {
+                if (matriz[fi][co].getEstado().equals("Buena") && matriz[fi][co].getJugador().equals(nomJdr1)) fBuenosJdr1++;
+                else if (matriz[fi][co].getEstado().equals("Buena") && matriz[fi][co].getJugador().equals(nomJdr2)) fBuenosJdr2++;
+                else if(matriz[fi][co].getEstado().equals("Mala") && matriz[fi][co].getJugador().equals(nomJdr1)) fMalosJdr1++;
+                else if (matriz[fi][co].getEstado().equals("Mala") && matriz[fi][co].getJugador().equals(nomJdr2)) fMalosJdr2++;
             }
         }
     }
@@ -486,7 +487,7 @@ public class GhostGame {
         //POSICIONES RANDOM JUGADOR 2
         insertarRandom(matriz, fantasmasJ2, posJ2, 1, 2, 1, 5);
     }
-    
+
     //Funcion para que la computadora ponga las fichas de manera random
     public void insertarRandom(Ghost[][] matriz, Ghost[] fantasmasJdr, String[] posicionesJdr, int minFi, int maxFi, int minCo, int maxCo) {
         for (int i = 0; i < fantasmasJdr.length; i++) {    

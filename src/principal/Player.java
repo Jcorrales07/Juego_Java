@@ -58,7 +58,7 @@ public class Player {
     // Otras Funciones
     public void mostrarDatos() {
         System.out.println("\n╠═◘═╬╣DATOS DEL JUGADOR╠╬═◘═╣"
-                + "\nUsuario: "+ username
+                +"\n\nUsuario: "+ username
                 +"\nContraseña: "+ password
                 +"\nPuntaje: "+ score);
     }

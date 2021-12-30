@@ -21,7 +21,7 @@ public class Menu {
         System.out.println("\n\t     ╠╬══╣BIENVENIDO A GHOSTGAME╠══╬╣");
         do {
             opcion = func.myNextInt("\n\t╠╬══╣MENU DE INICIO╠══╬╣"
-                + "\n  1) Log in"
+                + "\n\n  1) Log in"
                 + "\n  2) Registrar Jugador"
                 + "\n  0) Salir"
                 + "\nOPCION #"); 
@@ -61,7 +61,7 @@ public class Menu {
         System.out.println("\n\t»» HA INICIADO SESION ««");
         do {
             opcion = func.myNextInt("\n\t╠╬══╣MENU PRINCIPAL╠══╬╣"
-                + "\n  1) Jugar Ghosts"
+                + "\n\n  1) Jugar Ghosts"
                 + "\n  2) Configuracion"
                 + "\n  3) Reportes"
                 + "\n  4) Mi Perfil"                    
@@ -88,7 +88,6 @@ public class Menu {
                                     + "\n 3) Genius (2 fantasmas)"
                                     + "\nOPCION #");
                                 func.configDificultad(opcion);
-                                
                                 break;
                             case 2:// MODO DE JUEGO 
                                 func.configModoDeJuego();
@@ -144,8 +143,8 @@ public class Menu {
                                 break;
                                 
                             case 3://ELIMINAR CUENTA
-                                func.eliminarCuenta();
-                                menuInicio();
+                                if(func.eliminarCuenta())
+                                    menuInicio();
                                 repetir = false;
                                 break;
                                 
